@@ -197,3 +197,8 @@ Type::build('timestamp')
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
+
+/* 追加の配列 */
+Configure::write( [
+  "gender" => ["0" => "男", "1" => "女", "2" => "未選択"],
+]);
