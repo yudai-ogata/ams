@@ -4,23 +4,14 @@
  * @var \App\Model\Entity\TDomain $tDomain
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List T Domains'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List T Users'), ['controller' => 'TUsers', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New T User'), ['controller' => 'TUsers', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
 <div class="tDomains form large-9 medium-8 columns content">
     <?= $this->Form->create($tDomain) ?>
     <fieldset>
-        <legend><?= __('Add T Domain') ?></legend>
+        <legend><?= __('ドメイン追加') ?></legend>
         <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('deleted');
+            echo $this->Form->control('name',['label'=>'ドメイン名']);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('追加')) ?>
     <?= $this->Form->end() ?>
 </div>

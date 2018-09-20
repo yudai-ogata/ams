@@ -20,7 +20,9 @@ class TDomainsController extends AppController
      */
     public function index()
     {
-        $tDomains = $this->paginate($this->TDomains);
+        $tDomains = $this->TDomains->find()
+              ->where(["TDomains.deleted =" => '0']);
+        $tDomains = $this->paginate($tDomains);
 
         $this->set(compact('tDomains'));
     }
@@ -34,9 +36,14 @@ class TDomainsController extends AppController
      */
     public function view($id = null)
     {
-        $tDomain = $this->TDomains->get($id, [
+        /*$tDomain = $this->TDomains->get($id, [
             'contain' => ['TUsers']
-        ]);
+        ]);*/
+        $tDomain = $this->TDomains->find()
+                                  ->where(['id' => $id])
+                                  ->contain('TUsers', function ($q) {
+                                    return $q->where(['TUsers.deleted' => '0']);
+                                  })->first();
 
         $this->set('tDomain', $tDomain);
     }
@@ -52,11 +59,11 @@ class TDomainsController extends AppController
         if ($this->request->is('post')) {
             $tDomain = $this->TDomains->patchEntity($tDomain, $this->request->getData());
             if ($this->TDomains->save($tDomain)) {
-                $this->Flash->success(__('The t domain has been saved.'));
+                $this->Flash->success(__('ドメインの追加が完了しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The t domain could not be saved. Please, try again.'));
+            $this->Flash->error(__('入力内容にエラーがあります。'));
         }
         $this->set(compact('tDomain'));
     }
@@ -76,11 +83,12 @@ class TDomainsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tDomain = $this->TDomains->patchEntity($tDomain, $this->request->getData());
             if ($this->TDomains->save($tDomain)) {
-                $this->Flash->success(__('The t domain has been saved.'));
+                $this->Flash->success(__('ドメインの内容を更新しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The t domain could not be saved. Please, try again.'));
+            $this->Flash->error(__('入力内容にエラーがあります。'));
+            return $this->redirect(['action' => 'index']);
         }
         $this->set(compact('tDomain'));
     }
@@ -94,14 +102,19 @@ class TDomainsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $tDomain = $this->TDomains->get($id);
-        if ($this->TDomains->delete($tDomain)) {
-            $this->Flash->success(__('The t domain has been deleted.'));
-        } else {
-            $this->Flash->error(__('The t domain could not be deleted. Please, try again.'));
-        }
+        $tDomain = $this->TDomains->get($id, [
+            'contain' => []
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $getData = $this->request->getData();
+            $getData["deleted"] = 1;
+            $tDomain = $this->TDomains->patchEntity($tDomain, $getData);
+            if ($this->TDomains->save($tDomain)) {
+                $this->Flash->success(__('削除が完了しました。'));
 
-        return $this->redirect(['action' => 'index']);
+                  return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('削除できませんでした。'));
+        }
     }
 }

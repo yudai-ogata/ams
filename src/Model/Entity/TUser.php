@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Entity;
 
+use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\Entity;
 
 /**
@@ -31,7 +32,7 @@ class TUser extends Entity
      */
     protected $_accessible = [
         'name' => true,
-        'pw' => true,
+        'password' => true,
         'admin' => true,
         't_domain_id' => true,
         'created' => true,
@@ -39,4 +40,18 @@ class TUser extends Entity
         'deleted' => true,
         't_domain' => true
     ];
+  
+    protected $_hidden = [
+        'password'
+    ];
+  
+    protected function _setPassword($password)
+    {
+        return (new DefaultPasswordHasher)->hash($password, 'sha256');
+    }
+  
+    protected function _setLoginAuth($password)
+    {
+        return (new DefaultPasswordHasher)->hash($password, 'sha256');
+    }
 }

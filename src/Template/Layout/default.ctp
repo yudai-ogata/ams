@@ -13,7 +13,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = '案件管理システム';
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,6 +28,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('style.css') ?>
+    <?= $this->Html->css('custom.css') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
@@ -42,13 +43,23 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>
+                <li><a>ユーザーネーム</a></li>
+                <li><a>管理ドメイン</a></li>
+                <li><a>ログアウト</a></li>
             </ul>
         </div>
     </nav>
     <?= $this->Flash->render() ?>
     <div class="container clearfix">
+        <nav class="large-3 medium-4 columns" id="actions-sidebar">
+          <ul class="side-nav">
+              <li><?= $this->Html->link(__('案件一覧'), ['controller' => 'TContents', 'action' => 'index']) ?></li>
+              <li><?= $this->Html->link(__('ユーザー一覧'), ['controller' => 'TUsers', 'action' => 'index']) ?></li>
+              <li><?= $this->Html->link(__('ユーザー追加'), ['controller' => 'TUsers', 'action' => 'add']) ?></li>
+              <li><?= $this->Html->link(__('ドメイン一覧'), ['controller' => 'TDomains', 'action' => 'index']) ?></li>
+              <li><?= $this->Html->link(__('ドメイン追加'), ['controller' => 'TDomains', 'action' => 'add']) ?></li>
+          </ul>
+        </nav>
         <?= $this->fetch('content') ?>
     </div>
     <footer>

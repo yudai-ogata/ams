@@ -23,7 +23,9 @@ class TUsersController extends AppController
         $this->paginate = [
             'contain' => ['TDomains']
         ];
-        $tUsers = $this->paginate($this->TUsers);
+        $tUsers = $this->TUsers->find()
+              ->where(["TUsers.deleted =" => '0']);
+        $tUsers = $this->paginate($tUsers);
 
         $this->set(compact('tUsers'));
     }
@@ -55,13 +57,14 @@ class TUsersController extends AppController
         if ($this->request->is('post')) {
             $tUser = $this->TUsers->patchEntity($tUser, $this->request->getData());
             if ($this->TUsers->save($tUser)) {
-                $this->Flash->success(__('The t user has been saved.'));
+                $this->Flash->success(__('ユーザーの追加が完了しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The t user could not be saved. Please, try again.'));
+            $this->Flash->error(__('入力内容にエラーがあります。'));
         }
-        $tDomains = $this->TUsers->TDomains->find('list', ['limit' => 200]);
+        $tDomains = $this->TUsers->TDomains->find('list', ['limit' => 200])
+              ->where(["TDomains.deleted =" => '0']);
         $this->set(compact('tUser', 'tDomains'));
     }
 
@@ -80,13 +83,14 @@ class TUsersController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tUser = $this->TUsers->patchEntity($tUser, $this->request->getData());
             if ($this->TUsers->save($tUser)) {
-                $this->Flash->success(__('The t user has been saved.'));
+                $this->Flash->success(__('ユーザーの内容を変更しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The t user could not be saved. Please, try again.'));
+            $this->Flash->error(__('入力内容にエラーがあります。'));
         }
-        $tDomains = $this->TUsers->TDomains->find('list', ['limit' => 200]);
+        $tDomains = $this->TUsers->TDomains->find('list', ['limit' => 200])
+              ->where(["TDomains.deleted =" => '0']);
         $this->set(compact('tUser', 'tDomains'));
     }
 
@@ -99,14 +103,20 @@ class TUsersController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $tUser = $this->TUsers->get($id);
-        if ($this->TUsers->delete($tUser)) {
-            $this->Flash->success(__('The t user has been deleted.'));
-        } else {
-            $this->Flash->error(__('The t user could not be deleted. Please, try again.'));
-        }
+        $tUser = $this->TUsers->get($id, [
+            'contain' => []
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $getData = $this->request->getData();
+            $getData["deleted"] = 1;
+            $tUser = $this->TUsers->patchEntity($tUser, $getData);
+            if ($this->TUsers->save($tUser)) {
+                $this->Flash->success(__('削除が完了しました。'));
 
-        return $this->redirect(['action' => 'index']);
+                  return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('削除できませんでした。'));
+            return $this->redirect(['action' => 'index']);
+        }
     }
 }

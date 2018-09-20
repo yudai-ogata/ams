@@ -63,12 +63,11 @@ class TDomainsTable extends Table
             ->maxLength('name', 255)
             ->requirePresence('name', 'create')
             ->notEmpty('name')
-            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table','message'=>'既に登録されているドメインです。']);
 
         $validator
             ->boolean('deleted')
-            ->requirePresence('deleted', 'create')
-            ->notEmpty('deleted');
+            ->allowEmpty('deleted');
 
         return $validator;
     }

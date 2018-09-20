@@ -4,40 +4,41 @@
  * @var \App\Model\Entity\TContent $tContent
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit T Content'), ['action' => 'edit', $tContent->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete T Content'), ['action' => 'delete', $tContent->id], ['confirm' => __('Are you sure you want to delete # {0}?', $tContent->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List T Contents'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New T Content'), ['action' => 'add']) ?> </li>
-    </ul>
-</nav>
 <div class="tContents view large-9 medium-8 columns content">
     <h3><?= h($tContent->name) ?></h3>
     <table class="vertical-table">
+        <div class="actions">
+          <?= $this->Html->link(__('編集'), ['action' => 'edit', $tContent->id]) ?>
+          <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $tContent->id], ['confirm' => __('削除してよろしいですか？', $tContent->id), 'class' => 'delete']) ?>
+        </div>
         <tr>
-            <th scope="row"><?= __('Name') ?></th>
+            <th scope="row"><?= __('名前') ?></th>
             <td><?= h($tContent->name) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Name Kana') ?></th>
+            <th scope="row"><?= __('名前（カナ）') ?></th>
             <td><?= h($tContent->name_kana) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Age') ?></th>
+            <th scope="row"><?= __('年齢') ?></th>
             <td><?= h($tContent->age) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Tel') ?></th>
+            <th scope="row"><?= __('性別') ?></th>
+            <td><?php if($tContent->gender == 1 ){ echo "男性"; }
+                  elseif($tContent->gender == 2 ){ echo "女性"; }
+                  else{ echo "未選択"; } ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('電話番号') ?></th>
             <td><?= h($tContent->tel) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Zip') ?></th>
+            <th scope="row"><?= __('郵便番号') ?></th>
             <td><?= h($tContent->zip) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Address') ?></th>
+            <th scope="row"><?= __('住所') ?></th>
             <td><?= h($tContent->address) ?></td>
         </tr>
         <tr>
@@ -45,40 +46,28 @@
             <td><?= h($tContent->email) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Domain') ?></th>
+            <th scope="row"><?= __('ドメイン名') ?></th>
             <td><?= h($tContent->domain) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Param') ?></th>
+            <th scope="row"><?= __('アフィリパラメータ') ?></th>
             <td><?= h($tContent->param) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Product Name') ?></th>
+            <th scope="row"><?= __('商品名') ?></th>
             <td><?= h($tContent->product_name) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($tContent->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Created') ?></th>
+            <th scope="row"><?= __('登録日') ?></th>
             <td><?= h($tContent->created) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Modified') ?></th>
+            <th scope="row"><?= __('更新日') ?></th>
             <td><?= h($tContent->modified) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Gender') ?></th>
-            <td><?= $tContent->gender ? __('Yes') : __('No'); ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Deleted') ?></th>
-            <td><?= $tContent->deleted ? __('Yes') : __('No'); ?></td>
         </tr>
     </table>
     <div class="row">
-        <h4><?= __('Detail') ?></h4>
+        <h4><?= __('詳細') ?></h4>
         <?= $this->Text->autoParagraph(h($tContent->detail)); ?>
     </div>
 </div>

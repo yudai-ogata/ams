@@ -37,10 +37,17 @@ class AppController extends Controller
      *
      * @return void
      */
+
+    public $paginate = [
+      'limit' => 20,
+      'order' => [
+          'Persons.name' => 'asc'
+        ]
+      ];
+
     public function initialize()
     {
         parent::initialize();
-
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);

@@ -64,13 +64,13 @@ class TUsersTable extends Table
             ->maxLength('name', 255)
             ->requirePresence('name', 'create')
             ->notEmpty('name')
-            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => '既に登録されているユーザー名です。']);
 
         $validator
-            ->scalar('pw')
-            ->maxLength('pw', 255)
-            ->requirePresence('pw', 'create')
-            ->notEmpty('pw');
+            ->scalar('password')
+            ->maxLength('password', 255)
+            ->requirePresence('password', 'create')
+            ->notEmpty('password');
 
         $validator
             ->boolean('admin')
@@ -79,9 +79,8 @@ class TUsersTable extends Table
 
         $validator
             ->boolean('deleted')
-            ->requirePresence('deleted', 'create')
-            ->notEmpty('deleted');
-
+            ->allowEmpty('deleted');
+      
         return $validator;
     }
 

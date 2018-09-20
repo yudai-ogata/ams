@@ -64,12 +64,12 @@ class TContentsTable extends Table
             ->allowEmpty('name_kana');
 
         $validator
-            ->scalar('age')
+            ->integer('age')
             ->maxLength('age', 255)
             ->allowEmpty('age');
 
         $validator
-            ->boolean('gender')
+            ->integer('gender')
             ->allowEmpty('gender');
 
         $validator

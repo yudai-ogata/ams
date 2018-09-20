@@ -1,0 +1,30 @@
+* {
+  transition: 0.2s;
+}
+
+div.actions {
+  padding-bottom: 20px;
+}
+
+td.actions a,
+div.actions a {
+  background: #1798A5;
+  color: #fff;
+  padding: 0.2em 0.4em;
+  border-radius: 10%;
+}
+
+td.actions a.delete,
+div.actions a.delete {
+  background: #e32c22;
+}
+
+td.actions a:hover,
+div.actions a:hover {
+  opacity: 0.8;
+}
+
+.content h4 {
+  color: #1798a5;
+  border-bottom-color: inherit;
+}

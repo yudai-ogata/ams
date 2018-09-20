@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * TContents Controller
@@ -13,6 +14,13 @@ use App\Controller\AppController;
 class TContentsController extends AppController
 {
 
+    public function initialize()
+    {
+         parent::initialize();
+
+         $this->TDomains = TableRegistry::get('tDomains');
+    }
+  
     /**
      * Index method
      *
@@ -20,9 +28,15 @@ class TContentsController extends AppController
      */
     public function index()
     {
-        $tContents = $this->paginate($this->TContents);
-
-        $this->set(compact('tContents'));
+        $tContents = $this->TContents->find()
+              ->where(["TContents.deleted =" => '0']);
+        $tContents = $this->paginate($tContents);
+        $tDomains = $this->TDomains->find()
+              ->where(["TDomains.deleted =" => '0'])
+              ->select(["name"])
+              ->enableHydration(false)
+              ->toArray();
+        $this->set(compact('tContents',"tDomains"));
     }
 
     /**
@@ -52,11 +66,11 @@ class TContentsController extends AppController
         if ($this->request->is('post')) {
             $tContent = $this->TContents->patchEntity($tContent, $this->request->getData());
             if ($this->TContents->save($tContent)) {
-                $this->Flash->success(__('The t content has been saved.'));
+                $this->Flash->success(__('案件登録が完了しました。.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The t content could not be saved. Please, try again.'));
+            $this->Flash->error(__('入力内容にエラーがあります。'));
         }
         $this->set(compact('tContent'));
     }
@@ -76,11 +90,11 @@ class TContentsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tContent = $this->TContents->patchEntity($tContent, $this->request->getData());
             if ($this->TContents->save($tContent)) {
-                $this->Flash->success(__('The t content has been saved.'));
+                $this->Flash->success(__('案件内容の更新しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The t content could not be saved. Please, try again.'));
+            $this->Flash->error(__('入力内容にエラーがあります。'));
         }
         $this->set(compact('tContent'));
     }
@@ -94,14 +108,20 @@ class TContentsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $tContent = $this->TContents->get($id);
-        if ($this->TContents->delete($tContent)) {
-            $this->Flash->success(__('The t content has been deleted.'));
-        } else {
-            $this->Flash->error(__('The t content could not be deleted. Please, try again.'));
-        }
+        $tContent = $this->TContents->get($id, [
+            'contain' => []
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $getData = $this->request->getData();
+            $getData["deleted"] = 1;
+            $tContent = $this->TContents->patchEntity($tContent, $getData);
+            if ($this->TContents->save($tContent)) {
+                $this->Flash->success(__('削除が完了しました。'));
 
-        return $this->redirect(['action' => 'index']);
+                  return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('削除できませんでした。'));
+            return $this->redirect(['action' => 'index']);
+        }
     }
 }

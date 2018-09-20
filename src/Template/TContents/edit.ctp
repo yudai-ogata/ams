@@ -4,38 +4,28 @@
  * @var \App\Model\Entity\TContent $tContent
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $tContent->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $tContent->id)]
-            )
-        ?></li>
-        <li><?= $this->Html->link(__('List T Contents'), ['action' => 'index']) ?></li>
-    </ul>
-</nav>
 <div class="tContents form large-9 medium-8 columns content">
     <?= $this->Form->create($tContent) ?>
     <fieldset>
-        <legend><?= __('Edit T Content') ?></legend>
+        <legend><?= __('案件編集') ?></legend>
         <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('name_kana');
-            echo $this->Form->control('age');
-            echo $this->Form->control('gender');
-            echo $this->Form->control('tel');
-            echo $this->Form->control('zip');
-            echo $this->Form->control('address');
-            echo $this->Form->control('email');
-            echo $this->Form->control('domain');
-            echo $this->Form->control('param');
-            echo $this->Form->control('product_name');
-            echo $this->Form->control('detail');
-            echo $this->Form->control('deleted');
+            echo $this->Form->control('name',['label'=>'名前']);
+            echo $this->Form->control('name_kana',['label'=>'名前（カナ）']);
+            echo $this->Form->control('age',['type'=>'number','label'=>'年齢']);
+            echo $this->Form->radio('gender',[
+                ['value' => '1', 'text' => '男性'],
+                ['value' => '2', 'text' => '女性'],
+              ]);
+            echo $this->Form->control('tel',['label'=>'電話番号']);
+            echo $this->Form->control('zip',['label'=>'郵便番号','pattern'=>'\d{3}-?\d{4}']);
+            echo $this->Form->control('address',['label'=>'住所']);
+            echo $this->Form->control('email',['type'=>'email','label'=>'Email']);
+            echo $this->Form->control('domain',['label'=>'ドメイン名']);
+            echo $this->Form->control('param',['label'=>'アフィリパラメータ']);
+            echo $this->Form->control('product_name',['label'=>'商品名']);
+            echo $this->Form->control('detail',['label'=>'詳細']);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('更新')) ?>
     <?= $this->Form->end() ?>
 </div>
