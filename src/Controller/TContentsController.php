@@ -13,30 +13,55 @@ use Cake\ORM\TableRegistry;
  */
 class TContentsController extends AppController
 {
+    public $paginate = ['limit' => 10];
 
     public function initialize()
     {
-         parent::initialize();
-
-         $this->TDomains = TableRegistry::get('tDomains');
+        parent::initialize();
+        $session = $this->request->session();
+        $number = $session->read('number');
+        if (empty($number) ) {
+            $number = 10;
+        }
+        $this->paginate['limit'] = $number;
+        $this->TDomains = TableRegistry::get('tDomains');
+        $this->loadComponent('Paginator');
     }
-  
+
     /**
      * Index method
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
+    public function index($number = null)
     {
-        $tContents = $this->TContents->find()
-              ->where(["TContents.deleted =" => '0']);
+        $user_info = $this->viewVars['user_info'];
+        if (!empty($this->request->query('page'))) {
+            $page = $this->request->query('page');
+        }
+        $session = $this->request->session();
+        if ( !empty($number) ) {
+            $session->write('number', $number);
+            $this->paginate['limit'] = $number;
+        } else {
+            $number = $this->paginate['limit'];
+        }
+        //権限による分岐
+        if ($user_info['admin'] == true) {
+            $tContents = $this->TContents->find()
+                  ->where(["TContents.deleted =" => '0']);
+        } else {
+            $tContents = $this->TContents->find()
+                  ->where(["TContents.deleted =" => '0'])
+                  ->andWhere(["TContents.domain =" => $user_info['domain']]);
+        }
         $tContents = $this->paginate($tContents);
         $tDomains = $this->TDomains->find()
-              ->where(["TDomains.deleted =" => '0'])
-              ->select(["name"])
-              ->enableHydration(false)
-              ->toArray();
-        $this->set(compact('tContents',"tDomains"));
+            ->where(["TDomains.deleted =" => '0'])
+            ->select(["name"])
+            ->enableHydration(false)
+            ->toArray();
+        $this->set(compact('tContents',"tDomains", 'number', 'page'));
     }
 
     /**
@@ -62,6 +87,10 @@ class TContentsController extends AppController
      */
     public function add()
     {
+        $user_info = $this->viewVars['user_info'];
+        if($user_info['admin'] == false) {
+            return $this->redirect(['controller'=>'tContents' ,'action' => 'index']);
+        }
         $tContent = $this->TContents->newEntity();
         if ($this->request->is('post')) {
             $tContent = $this->TContents->patchEntity($tContent, $this->request->getData());
@@ -84,13 +113,17 @@ class TContentsController extends AppController
      */
     public function edit($id = null)
     {
+        $user_info = $this->viewVars['user_info'];
+        if($user_info['admin'] == false) {
+            return $this->redirect(['controller'=>'tContents' ,'action' => 'index']);
+        }
         $tContent = $this->TContents->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tContent = $this->TContents->patchEntity($tContent, $this->request->getData());
             if ($this->TContents->save($tContent)) {
-                $this->Flash->success(__('案件内容の更新しました。'));
+                $this->Flash->success(__('案件の内容を更新しました。'));
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -108,6 +141,10 @@ class TContentsController extends AppController
      */
     public function delete($id = null)
     {
+        $user_info = $this->viewVars['user_info'];
+        if($user_info['admin'] == false) {
+            return $this->redirect(['controller'=>'tContents' ,'action' => 'index']);
+        }
         $tContent = $this->TContents->get($id, [
             'contain' => []
         ]);
@@ -123,5 +160,139 @@ class TContentsController extends AppController
             $this->Flash->error(__('削除できませんでした。'));
             return $this->redirect(['action' => 'index']);
         }
+    }
+
+    public function find($find = null, $number = null)
+    {
+        $user_info = $this->viewVars['user_info'];
+        $tContents=[];
+        $session = $this->request->session();
+        if(empty($find)){
+            if( !empty($this->request->data['find']) ){
+                $find = $this->request->data['find'];
+                $session -> write('find', $find);
+            }
+            $find = $session -> read('find');
+        }
+        if ( !empty($number) ) {
+            $session->write('number', $number);
+            $this->paginate['limit'] = $number;
+        } else {
+            $number = $this->paginate['limit'];
+        }
+        if (!empty($this->request->query('page'))) {
+            $page = $this->request->query('page');
+        }
+        //権限による分岐
+        if ($user_info['admin'] == true) {
+            $tContents = $this->TContents->find()
+                  ->where(["name like " => '%' . $find . '%'])
+                  ->orWhere(["created like " => '%' . $find . '%'])
+                  ->orWhere(["domain like " => '%' . $find . '%'])
+                  ->orWhere(["param like " => $find])
+                  ->orWhere(["product_name like " => '%' . $find . '%'])
+                  ->andWhere(["TContents.deleted =" => '0']);
+        } else {
+            $tContents = $this->TContents->find()
+                  ->where(["name like " => '%' . $find . '%'])
+                  ->orWhere(["created like " => '%' . $find . '%'])
+                  ->andWhere(["domain =" => $user_info['domain']])
+                  ->orWhere(["param like " => $find])
+                  ->orWhere(["product_name like " => '%' . $find . '%'])
+                  ->andWhere(["TContents.deleted =" => '0']);
+        }
+        $tContents = $this->paginate($tContents);
+        $tDomains = $this->TDomains->find()
+              ->where(["TDomains.deleted =" => '0'])
+              ->select(["name"])
+              ->enableHydration(false)
+              ->toArray();
+        $this->set(compact('tContents',"tDomains", "find", 'number','page'));
+    }
+
+    public function export($number = null)
+    {
+        $user_info = $this->viewVars['user_info'];
+        $tContents=[];
+        $session = $this->request->session();
+        if ( !empty($number) ) {
+            $session->write('number', $number);
+            $this->paginate['limit'] = $number;
+        } else {
+            $number = $this->paginate['limit'];
+        }
+        //権限による分岐
+        if ($user_info['admin'] == true) {
+            $tContents = $this->TContents->find()
+                  ->where(["TContents.deleted =" => '0']);
+        } else {
+            $tContents = $this->TContents->find()
+                  ->where(["TContents.deleted =" => '0'])
+                  ->andWhere(["TContents.domain =" => $user_info['domain']]);
+        }
+        $tContents = $this->paginate($tContents);
+
+        $data = $tContents;
+        $_serialize = ['data'];
+        $_header = ['登録ID', '名前', '名前（カナ）', '年齢', '性別', '電話番号', '郵便番号', '住所', 'E-mail', 'ドメイン名', 'アフィリパラメータ', '商品名', '詳細','登録日', '更新日'];
+
+        $_csvEncoding = 'CP932';
+        $_newline = "\r\n";
+        $_eol = "\r\n";
+
+        $this->response->download('my_file.csv');
+        $this->viewBuilder()->className('CsvView.Csv');
+         $this->set(compact('data', '_serialize', '_header', '_csvEncoding', '_newline', '_eol'));
+    }
+
+    public function exportFind($find = null, $number = null)
+    {
+        $user_info = $this->viewVars['user_info'];
+        $session = $this->request->session();
+        $tContents=[];
+        if(empty($find)){
+            if( !empty($this->request->data['find']) ){
+                $find = $this->request->data['find'];
+                $session -> write('find', $find);
+            }
+            $find = $session -> read('find');
+        }
+        if ( !empty($number) ) {
+            $session->write('number', $number);
+            $this->paginate['limit'] = $number;
+        } else {
+            $number = $this->paginate['limit'];
+        }
+        //権限による分岐
+        if ($user_info['admin'] == true) {
+            $tContents = $this->TContents->find()
+                  ->where(["name like " => '%' . $find . '%'])
+                  ->orWhere(["created like " => '%' . $find . '%'])
+                  ->orWhere(["domain like " => '%' . $find . '%'])
+                  ->orWhere(["param like " => $find])
+                  ->orWhere(["product_name like " => '%' . $find . '%'])
+                  ->andWhere(["TContents.deleted =" => '0']);
+        } else {
+            $tContents = $this->TContents->find()
+                  ->where(["name like " => '%' . $find . '%'])
+                  ->orWhere(["created like " => '%' . $find . '%'])
+                  ->andWhere(["domain =" => $user_info['domain']])
+                  ->orWhere(["param like " => $find])
+                  ->orWhere(["product_name like " => '%' . $find . '%'])
+                  ->andWhere(["TContents.deleted =" => '0']);
+        }
+        $tContents = $this->paginate($tContents);
+
+        $data = $tContents;
+        $_serialize = ['data'];
+        $_header = ['登録ID', '名前', '名前（カナ）', '年齢', '性別', '電話番号', '郵便番号', '住所', 'E-mail', 'ドメイン名', 'アフィリパラメータ', '商品名', '詳細','登録日', '更新日'];
+
+        $_csvEncoding = 'CP932';
+        $_newline = "\r\n";
+        $_eol = "\r\n";
+
+        $this->response->download('my_file.csv');
+        $this->viewBuilder()->className('CsvView.Csv');
+         $this->set(compact('data', '_serialize', '_header', '_csvEncoding', '_newline', '_eol'));
     }
 }

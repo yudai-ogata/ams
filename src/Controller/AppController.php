@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -40,18 +41,69 @@ class AppController extends Controller
 
     public $paginate = [
       'limit' => 20,
-      'order' => [
-          'Persons.name' => 'asc'
-        ]
       ];
 
     public function initialize()
     {
         parent::initialize();
+        $this->TUsers = TableRegistry::get('tUsers');
+        $this->TDomains = TableRegistry::get('tDomains');
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
+        $this->loadComponent('Security');
+
+        //ログイン済みの場合、セッション情報の取得
+        $session = $this->request->session();
+        if ($session->check('Auth')) {
+            //ユーザーのnameの取得
+            $user_info['name'] = $session->read('Auth.User.name');
+            //ユーザーのdomainの取得
+            $domain = $this->TDomains->get($session->read('Auth.User.t_domain_id'));
+            $user_info['domain'] = $domain['name'];
+            //ユーザーのadminの取得
+            $user_info['admin'] = $session->read('Auth.User.admin');
+            //ユーザーのdeleted fragの取得
+            $user_info['deleted'] = $session->read('Auth.User.deleted');
+            //削除済みユーザーの場合強制ログアウト
+            if($user_info['deleted'] == 1) {
+                $this->request->session()->destroy();
+                return $this->redirect($this->Auth->logout());
+                exit;
+            }
+            $this->set(compact('user_info'));
+        } else {
+            $user_info = false;
+            $this->set(compact('user_info'));
+        }
+
+        //ログイン認証処理
+        $this->loadComponent('Auth', [
+            'authenticate' => [
+                'Form' => [
+                    'userModel' => 'TUsers',
+                    'fields' => [ // ユーザー名とパスワードに使うカラムの指定。省略した場合はusernameとpasswordになる
+                        'username' => 'name', // ユーザー名のカラムを指定
+                        'password' => 'password' //パスワードに使うカラムを指定
+                    ]
+                ]
+            ],
+            'loginAction' => [
+                        'controller' => 'TUsers',
+                        'action' => 'login'
+            ],
+            'loginRedirect' => [
+                'controller' => 'TContents',
+                'action' => 'index'
+            ],
+            'logoutRedirect' => [
+                'controller' => 'TUsers',
+                'action' => 'login',
+            ],
+            'authError' => 'ログインして下さい',
+        ]);
+        $this->Auth->allow(['login']);
 
         /*
          * Enable the following component for recommended CakePHP security settings.

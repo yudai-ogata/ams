@@ -9,8 +9,10 @@
         "cakephp/cakephp": "3.6.*",
         "cakephp/migrations": "^2.0.0",
         "cakephp/plugin-installer": "^1.0",
+        "friendsofcake/cakephp-csvview": "^3.3",
         "josegonzalez/dotenv": "3.*",
-        "mobiledetect/mobiledetectlib": "2.*"
+        "mobiledetect/mobiledetectlib": "2.*",
+        "sonata-project/google-authenticator": "^2.2"
     },
     "require-dev": {
         "cakephp/bake": "^1.1",

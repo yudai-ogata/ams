@@ -9,7 +9,7 @@
     <h3><?= __('案件一覧') ?></h3>
     <div class="find_box">
         <?= $this->Form->create("",["action"=>"find"]) ?>
-        <?= $this->Form->input('find',["label"=>"案件検索"]); ?>
+        <?= $this->Form->input('find',["label"=>"案件検索", "value"=>$find]); ?>
         <?= $this->Form->button('検索',["class"=>"find_btn"]) ?>
         <?= $this->Form->end() ?>
     </div>
@@ -32,22 +32,22 @@
         <?php if ($number == 10) { ?>
             <span class="number number_selected">10件</span>
         <?php } else {
-            echo $this->Html->link(__('10件'), ['action' => 'index', 10],[ 'class' => "number"]);
+            echo $this->Html->link(__('10件'), ['action' => 'find', $find, 10],[ 'class' => "number"]);
         } ?>
         <?php if ($number == 30) { ?>
             <span class="number number_selected">30件</span>
         <?php } else {
-            echo $this->Html->link(__('30件'), ['action' => 'index', 30],[ 'class' => "number"]);
+            echo $this->Html->link(__('30件'), ['action' => 'find', $find,30],[ 'class' => "number"]);
         } ?>
         <?php if ($number == 50) { ?>
             <span class="number number_selected">50件</span>
         <?php } else {
-            echo $this->Html->link(__('50件'), ['action' => 'index', 50],[ 'class' => "number"]);
+            echo $this->Html->link(__('50件'), ['action' => 'find', $find,50],[ 'class' => "number"]);
         } ?>
         <?php if ($number == 100) { ?>
             <span class="number number_selected">100件</span>
         <?php } else {
-            echo $this->Html->link(__('100件'), ['action' => 'index', 100],[ 'class' => "number"]);
+            echo $this->Html->link(__('100件'), ['action' => 'find', $find,100],[ 'class' => "number"]);
         } ?>
     </div>
     <table cellpadding="0" cellspacing="0">
@@ -82,9 +82,9 @@
     </table>
     <?php
         if(isset($page)) {?>
-            <a class="export_btn" href="/ams/t-contents/export/?page=<?= $page ?>">CSV出力</a>
+            <a class="export_btn" href="/ams/t-contents/exportFind/<?= $find ?>?page=<?= $page ?>">CSV出力</a>
         <?php } else {
-            echo $this->Html->link(__('CSV出力'), ['action' => 'export'],['class' => 'export_btn']);
+            echo $this->Html->link(__('CSV出力'), ['action' => 'exportFind',$find],['class' => 'export_btn']);
         }
     ?>
     <div class="paginator">

@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\TContent $tContent
  */
 ?>
-<div class="tContents form large-9 medium-8 columns content">
+<div class="tContents form large-10 medium-9 columns content">
     <?= $this->Form->create($tContent) ?>
     <fieldset>
         <legend><?= __('案件編集') ?></legend>

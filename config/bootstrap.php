@@ -187,7 +187,6 @@ Type::build('datetime')
     ->useImmutable();
 Type::build('timestamp')
     ->useImmutable();
-
 /*
  * Custom Inflector rules, can be set to correctly pluralize or singularize
  * table, model, controller names or whatever other string is passed to the
@@ -202,3 +201,6 @@ Type::build('timestamp')
 Configure::write( [
   "gender" => ["0" => "男", "1" => "女", "2" => "未選択"],
 ]);
+
+/* プラグイン */
+Plugin::load('CsvView');

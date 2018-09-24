@@ -36,28 +36,30 @@ $cakeDescription = '案件管理システム';
 </head>
 <body>
     <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
+        <ul class="title-area large-2 medium-3 columns">
             <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
+                <h1><a href=""></a></h1>
             </li>
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><a>ユーザーネーム</a></li>
-                <li><a>管理ドメイン</a></li>
-                <li><a>ログアウト</a></li>
+                <li><a><?= $user_info['name'] ?></a></li>
+                <li><a><?= $user_info['domain'] ?></a></li>
+                <li><a><?= $this->Html->link(__('ログアウト'), ['controller' => 'TUsers', 'action' => 'logout']) ?></a></li>
             </ul>
         </div>
     </nav>
     <?= $this->Flash->render() ?>
     <div class="container clearfix">
-        <nav class="large-3 medium-4 columns" id="actions-sidebar">
+        <nav class="large-2 medium-3 columns" id="actions-sidebar">
           <ul class="side-nav">
               <li><?= $this->Html->link(__('案件一覧'), ['controller' => 'TContents', 'action' => 'index']) ?></li>
-              <li><?= $this->Html->link(__('ユーザー一覧'), ['controller' => 'TUsers', 'action' => 'index']) ?></li>
-              <li><?= $this->Html->link(__('ユーザー追加'), ['controller' => 'TUsers', 'action' => 'add']) ?></li>
-              <li><?= $this->Html->link(__('ドメイン一覧'), ['controller' => 'TDomains', 'action' => 'index']) ?></li>
-              <li><?= $this->Html->link(__('ドメイン追加'), ['controller' => 'TDomains', 'action' => 'add']) ?></li>
+                  <?php if($user_info['admin']==true) { ?>
+                  <li><?= $this->Html->link(__('ユーザー一覧'), ['controller' => 'TUsers', 'action' => 'index']) ?></li>
+                  <li><?= $this->Html->link(__('ユーザー追加'), ['controller' => 'TUsers', 'action' => 'add']) ?></li>
+                  <li><?= $this->Html->link(__('ドメイン一覧'), ['controller' => 'TDomains', 'action' => 'index']) ?></li>
+                  <li><?= $this->Html->link(__('ドメイン追加'), ['controller' => 'TDomains', 'action' => 'add']) ?></li>
+              <?php } ?>
           </ul>
         </nav>
         <?= $this->fetch('content') ?>

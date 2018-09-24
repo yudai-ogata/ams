@@ -28,3 +28,155 @@ div.actions a:hover {
   color: #1798a5;
   border-bottom-color: inherit;
 }
+
+.find_box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.find_box .input.text {
+  width: auto;
+  display: inline-block;
+}
+
+#find {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  font-size: 1rem;
+  padding: 0.5em;
+}
+
+.find_btn {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 0.3em 0.5em;
+  background: rgb(23, 152, 165);
+  border: 1px solid rgb(23, 152, 165);
+  border-radius: 0.2em;
+  transition: 0.2s;
+}
+
+.find_btn:hover {
+  background: rgb(23, 152, 165);
+  opacity: 0.8;
+}
+
+.find_notice {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.findDomain {
+  border: 1px solid #aaa;
+  border-radius: .7rem;
+  padding: .3rem .8rem .5rem;
+}
+
+.domain_ttl {
+  color: rgb(17, 109, 118);
+  font-weight: bold;
+  padding: 0.2em 0.5em;
+  margin-bottom: 0.2rem;
+}
+
+.domain_name {
+  background: rgb(17, 109, 118);
+  color: #fff;
+  border-radius: .3em;
+  padding: .2em .5em;
+  margin: 0 .2em;
+}
+
+.domain_name:hover {
+  color: #fff;
+  opacity: .8;
+}
+
+.numberBox {
+  margin: 1rem .5rem .5rem;
+}
+
+.numberText {
+  font-size: .8rem;
+  color: #555;
+}
+
+.number {
+  margin-right: .5rem;
+  font-size: .8rem;
+}
+
+.export_btn {
+  font-size: .9rem;
+  background: #555;
+  color: #fff;
+  padding: .3rem .5rem;
+  border-radius: .3rem;
+}
+
+.export_btn:hover {
+  color: #fff;
+  opacity: .8;
+}
+
+/****************
+ *    login
+ ****************/
+.login {
+  position: relative;
+  height: 100%;
+  background: #ddd;
+}
+
+.login_txt {
+  text-align: center;
+  font-weight: bold;
+  margin: 1rem 0 .5rem;
+  color: rgb(17, 109, 118);
+}
+
+.loginBox {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: #fff;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  height: 550px;
+  width: 300px;
+  border: 2px solid rgb(17, 109, 118);
+  border-radius: 1em;
+}
+
+.loginBox .login_input {
+  display: block;
+  width: 18em;
+  margin: auto;
+}
+
+.loginBox .input.text,
+.loginBox .input.password {
+  display: inline-block;
+}
+
+.login form {
+  display: inline-block;
+}
+
+.login button {
+  display: block;
+  margin: 1rem auto;
+  padding: .5em 1em;
+  border-radius: .3em;
+}
+
+.qr {
+  display: block;
+  margin: .5em auto 0;
+}

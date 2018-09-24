@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\TUser[]|\Cake\Collection\CollectionInterface $tUsers
  */
 ?>
-<div class="tUsers index large-9 medium-8 columns content">
+<div class="tUsers index large-10 medium-9 columns content">
     <h3><?= __('ユーザー一覧') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
@@ -35,11 +35,11 @@
     </table>
     <div class="paginator">
         <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
+            <?= $this->Paginator->first('<< ' . __('最初へ')) ?>
             <?= $this->Paginator->prev('< ' . __('前へ')) ?>
             <?= $this->Paginator->numbers() ?>
             <?= $this->Paginator->next(__('次へ') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
+            <?= $this->Paginator->last(__('最後へ') . ' >>') ?>
         </ul>
         <p><?= $this->Paginator->counter(['format' => __('{{pages}} ページ中 {{page}}ページ目, 全 {{count}} 件中 {{current}} 件表示')]) ?></p>
     </div>

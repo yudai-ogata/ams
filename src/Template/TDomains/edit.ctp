@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\TDomain $tDomain
  */
 ?>
-<div class="tDomains form large-9 medium-8 columns content">
+<div class="tDomains form large-10 medium-9 columns content">
     <?= $this->Form->create($tDomain) ?>
     <fieldset>
         <legend><?= __('ドメイン編集') ?></legend>

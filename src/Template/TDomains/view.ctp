@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\TDomain $tDomain
  */
 ?>
-<div class="tDomains view large-9 medium-8 columns content">
+<div class="tDomains view large-10 medium-9 columns content">
     <h3><?= h($tDomain->name) ?></h3>
     <table class="vertical-table">
         <tr>

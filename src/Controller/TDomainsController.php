@@ -13,6 +13,16 @@ use App\Controller\AppController;
 class TDomainsController extends AppController
 {
 
+    public $paginate = ['limit' => 20];
+
+    public function initialize()
+    {
+        parent::initialize();$user_info = $this->viewVars['user_info'];
+        if($user_info['admin'] == false) {
+            return $this->redirect(['controller'=>'tContents' ,'action' => 'index']);
+        }
+    }
+
     /**
      * Index method
      *
@@ -36,9 +46,6 @@ class TDomainsController extends AppController
      */
     public function view($id = null)
     {
-        /*$tDomain = $this->TDomains->get($id, [
-            'contain' => ['TUsers']
-        ]);*/
         $tDomain = $this->TDomains->find()
                                   ->where(['id' => $id])
                                   ->contain('TUsers', function ($q) {

@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\TUser $tUser
  */
 ?>
-<div class="tUsers form large-9 medium-8 columns content">
+<div class="tUsers form large-10 medium-9 columns content">
     <?= $this->Form->create($tUser) ?>
     <fieldset>
         <legend><?= __('ユーザー追加') ?></legend>

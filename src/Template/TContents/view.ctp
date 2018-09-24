@@ -4,12 +4,13 @@
  * @var \App\Model\Entity\TContent $tContent
  */
 ?>
-<div class="tContents view large-9 medium-8 columns content">
-    <h3><?= h($tContent->name) ?></h3>
+<div class="tContents view large-10 medium-9 columns content">
     <table class="vertical-table">
         <div class="actions">
-          <?= $this->Html->link(__('編集'), ['action' => 'edit', $tContent->id]) ?>
-          <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $tContent->id], ['confirm' => __('削除してよろしいですか？', $tContent->id), 'class' => 'delete']) ?>
+          <?php if($user_info['admin'] == true) { ?>
+              <?= $this->Html->link(__('編集'), ['action' => 'edit', $tContent->id]) ?>
+              <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $tContent->id], ['confirm' => __('削除してよろしいですか？', $tContent->id), 'class' => 'delete']) ?>
+          <?php } ?>
         </div>
         <tr>
             <th scope="row"><?= __('名前') ?></th>
@@ -59,11 +60,11 @@
         </tr>
         <tr>
             <th scope="row"><?= __('登録日') ?></th>
-            <td><?= h($tContent->created) ?></td>
+            <td><?= h($tContent->created->i18nFormat('YYYY/MM/dd HH:mm:ss')) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('更新日') ?></th>
-            <td><?= h($tContent->modified) ?></td>
+            <td><?= h($tContent->modified->i18nFormat('YYYY/MM/dd HH:mm:ss')) ?></td>
         </tr>
     </table>
     <div class="row">

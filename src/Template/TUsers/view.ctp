@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\TUser $tUser
  */
 ?>
-<div class="tUsers view large-9 medium-8 columns content">
+<div class="tUsers view large-10 medium-9 columns content">
     <h3><?= h($tUser->name) ?></h3>
     <table class="vertical-table">
         <tr>
