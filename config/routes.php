@@ -45,6 +45,7 @@ use Cake\Routing\Route\DashedRoute;
  *
  */
 Router::defaultRouteClass(DashedRoute::class);
+Router::extensions(['json', 'xml']);
 
 Router::scope('/', function (RouteBuilder $routes) {
     /**
@@ -75,5 +76,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
+    //$routes->connect('/t-contents/api', ['controller' => 'TContents', 'action' => 'api', '_ext' => 'json']);
     $routes->fallbacks(DashedRoute::class);
+    //$routes->fallbacks('DashedRoute');
 });

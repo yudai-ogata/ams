@@ -26,6 +26,7 @@ class TContentsController extends AppController
         $this->paginate['limit'] = $number;
         $this->TDomains = TableRegistry::get('tDomains');
         $this->loadComponent('Paginator');
+        $this->loadComponent('RequestHandler');
     }
 
     /**
@@ -294,5 +295,38 @@ class TContentsController extends AppController
         $this->response->download('my_file.csv');
         $this->viewBuilder()->className('CsvView.Csv');
          $this->set(compact('data', '_serialize', '_header', '_csvEncoding', '_newline', '_eol'));
+    }
+
+    public function api()
+    {
+        $this->viewBuilder()->className('Json');
+        $this->response->header("Access-Control-Allow-Origin: *");
+        $form_data = $this->request->query();
+        if (!empty($form_data)) {
+            $tContent = $this->TContents->newEntity();
+            $tContent = $this->TContents->patchEntity($tContent, $form_data);
+            if ($this->TContents->save($tContent)) {
+                $status = true;
+                $this->set([
+                    'status' => $status,
+                    '_serialize' => ['status']
+                ]);
+                return;
+            }
+            $status = false;
+            $this->set([
+                'status' => $status,
+                'tContent' => $tContent,
+                '_serialize' => ['status', 'tContent']
+            ]);
+            return;
+        }
+        $status = false;
+        $this->set([
+            'status' => $status,
+            'form_data' => $form_data,
+            '_serialize' => ['status', 'form_data'],
+        ]);
+        return;
     }
 }

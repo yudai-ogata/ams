@@ -48,11 +48,8 @@ class AppController extends Controller
         parent::initialize();
         $this->TUsers = TableRegistry::get('tUsers');
         $this->TDomains = TableRegistry::get('tDomains');
-        $this->loadComponent('RequestHandler', [
-            'enableBeforeRedirect' => false,
-        ]);
+        $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
-        $this->loadComponent('Security');
 
         //ログイン済みの場合、セッション情報の取得
         $session = $this->request->session();
@@ -103,7 +100,7 @@ class AppController extends Controller
             ],
             'authError' => 'ログインして下さい',
         ]);
-        $this->Auth->allow(['login']);
+        $this->Auth->allow(['login','api']);
 
         /*
          * Enable the following component for recommended CakePHP security settings.
