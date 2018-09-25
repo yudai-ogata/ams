@@ -2,6 +2,10 @@
   transition: 0.2s;
 }
 
+nav#actions-sidebar {
+  background: #eee;
+}
+
 div.actions {
   padding-bottom: 20px;
 }
@@ -19,8 +23,20 @@ div.actions a.delete {
   background: #e32c22;
 }
 
+button.delete {
+  background: #e32c22;
+  font-size: .9rem;
+  color: #fff;
+  padding: .3rem .5rem;
+  border-radius: .3rem;
+  margin: 0;
+  line-height: 1.2;
+  transition: .2s;
+}
+
 td.actions a:hover,
-div.actions a:hover {
+div.actions a:hover,
+button.delete:hover {
   opacity: 0.8;
 }
 
@@ -114,11 +130,22 @@ div.actions a:hover {
   color: #fff;
   padding: .3rem .5rem;
   border-radius: .3rem;
+  line-height: 1.2;
 }
 
 .export_btn:hover {
   color: #fff;
   opacity: .8;
+}
+
+.delete_th {
+  width: 4em;
+  text-align: center;
+}
+
+input#deleted {
+  display: block;
+  margin: auto;
 }
 
 /****************

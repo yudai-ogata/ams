@@ -9,13 +9,13 @@
     <h3><?= __('案件一覧') ?></h3>
     <div class="find_box">
         <?= $this->Form->create("",["action"=>"find"]) ?>
-        <?= $this->Form->input('find',["label"=>"案件検索"]); ?>
+        <?= $this->Form->input('find',["label"=>"案件検索", "value"=>$find]); ?>
         <?= $this->Form->button('検索',["class"=>"find_btn"]) ?>
         <?= $this->Form->end() ?>
     </div>
     <p class="find_notice">
         検索対象は「登録日」「ドメイン名」「アフィリパラメータ」「登録者名」「製品名」です。<br>
-        このうち、「アフィリパラメータ」のみ、検索ワードと登録内容が完全一致した場合のみヒットします。
+        このうち、「アフィリパラメータ」は、検索ワードと登録内容が完全一致した場合のみヒットします。
     </p>
     <?php if($user_info['admin'] == true) { ?>
         <div class="findDomain">
@@ -50,9 +50,11 @@
             echo $this->Html->link(__('100件'), ['action' => 'index', 100],[ 'class' => "number"]);
         } ?>
     </div>
+    <?= $this->Form->create($tContents,['action' => 'deleteBulk']) ?>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
+                <th class="delete_th" scope="col">削除</th>
                 <th scope="col"><?= $this->Paginator->sort('登録日') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('ドメイン名') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('アフィリパラメータ') ?></th>
@@ -62,8 +64,15 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($tContents as $tContent): ?>
+            <?php $count = 0;
+            foreach ($tContents as $tContent): ?>
             <tr>
+                <td>
+                <?php
+                    echo $this->Form->control('id',['name' => 't_contents['.$count.'][id]','type' => 'hidden', 'value' => $tContent->id]);
+                    echo $this->Form->control('deleted',['name' => 't_contents['.$count.'][deleted]','type' => 'checkbox', 'label' => false]);
+                ?>
+                </td>
                 <td><?= h($tContent->created->i18nFormat('YYYY/MM/dd HH:mm:ss')) ?></td>
                 <td><?= h($tContent->domain) ?></td>
                 <td><?= h($tContent->param) ?></td>
@@ -77,9 +86,13 @@
                     <?php } ?>
                 </td>
             </tr>
-            <?php endforeach; ?>
+            <?php
+            $count++;
+            endforeach; ?>
         </tbody>
     </table>
+    <?= $this->Form->button(__('一括削除'), ['confirm' => __('一括削除してよろしいですか？'), 'class' => 'delete']) ?>
+    <?= $this->Form->end() ?>
     <?php
         if(isset($page)) {?>
             <a class="export_btn" href="/ams/t-contents/export/?page=<?= $page ?>">CSV出力</a>

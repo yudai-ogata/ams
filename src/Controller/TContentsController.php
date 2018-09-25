@@ -47,6 +47,7 @@ class TContentsController extends AppController
         } else {
             $number = $this->paginate['limit'];
         }
+        $find = $session -> read('find');
         //権限による分岐
         if ($user_info['admin'] == true) {
             $tContents = $this->TContents->find()
@@ -60,9 +61,10 @@ class TContentsController extends AppController
         $tDomains = $this->TDomains->find()
             ->where(["TDomains.deleted =" => '0'])
             ->select(["name"])
+            ->order(['name' => 'ASC'])
             ->enableHydration(false)
             ->toArray();
-        $this->set(compact('tContents',"tDomains", 'number', 'page'));
+        $this->set(compact('tContents',"tDomains", 'number', 'page', 'find'));
     }
 
     /**
@@ -163,6 +165,26 @@ class TContentsController extends AppController
         }
     }
 
+    public function deleteBulk($id = null)
+    {
+        $user_info = $this->viewVars['user_info'];
+        if($user_info['admin'] == false) {
+            return $this->redirect(['controller'=>'tContents' ,'action' => 'index']);
+        }
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $tContents_deleted = $this->request->data('t_contents');
+            $tContents = $this->TContents->find();
+            $tContents = $this->TContents->patchEntities($tContents,$tContents_deleted);
+            if ($this->TContents->saveMany($tContents)) {
+                $this->Flash->success(__('削除が完了しました。'));
+
+                  return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('削除できませんでした。'));
+            return $this->redirect(['action' => 'index']);
+        }
+    }
+
     public function find($find = null, $number = null)
     {
         $user_info = $this->viewVars['user_info'];
@@ -174,6 +196,8 @@ class TContentsController extends AppController
                 $session -> write('find', $find);
             }
             $find = $session -> read('find');
+        } else {
+            $session -> write('find', $find);
         }
         if ( !empty($number) ) {
             $session->write('number', $number);
@@ -235,7 +259,7 @@ class TContentsController extends AppController
 
         $data = $tContents;
         $_serialize = ['data'];
-        $_header = ['登録ID', '名前', '名前（カナ）', '年齢', '性別', '電話番号', '郵便番号', '住所', 'E-mail', 'ドメイン名', 'アフィリパラメータ', '商品名', '詳細','登録日', '更新日'];
+        $_header = ['登録ID', '名前', '名前（カナ）', '年齢', '性別', '電話番号', '郵便番号', '住所', 'E-mail', 'ドメイン名', 'アフィリパラメータ', '商品名', '数量1', '数量2', '数量3', '詳細1', '詳細2', '詳細3', '詳細4', '詳細5','登録日', '更新日'];
 
         $_csvEncoding = 'CP932';
         $_newline = "\r\n";

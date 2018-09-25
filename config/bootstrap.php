@@ -200,6 +200,7 @@ Type::build('timestamp')
 /* 追加の配列 */
 Configure::write( [
   "gender" => ["0" => "男", "1" => "女", "2" => "未選択"],
+  "content_column" => ["name" => "名前", "name_kana" => "名前（カナ）", "age" => "年齢", "gender" => "性別", "tel" => "電話番号", "zip" => "郵便番号", "address" => "住所", "email" => "E-mail", "domain" => "ドメイン名", "param" => "アフィリパラメータ", "product_name" => "商品名", "number1" => "数量1", "number2" => "数量2", "number3" => "数量3", "detail1" => "詳細1", "detail2" => "詳細2", "detail3" => "詳細3", "detail4" => "詳細4", "detail5" => "詳細5", "created" => "登録日", "modified" => "更新日"],
 ]);
 
 /* プラグイン */

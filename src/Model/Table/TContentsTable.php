@@ -110,8 +110,36 @@ class TContentsTable extends Table
             ->allowEmpty('product_name');
 
         $validator
-            ->scalar('detail')
-            ->allowEmpty('detail');
+            ->integer('number1')
+            ->allowEmpty('number1');
+
+        $validator
+            ->integer('number2')
+            ->allowEmpty('number2');
+
+        $validator
+            ->integer('number3')
+            ->allowEmpty('number3');
+
+        $validator
+            ->scalar('detail1')
+            ->allowEmpty('detail1');
+
+        $validator
+            ->scalar('detail2')
+            ->allowEmpty('detail2');
+
+        $validator
+            ->scalar('detail3')
+            ->allowEmpty('detail3');
+
+        $validator
+            ->scalar('detail4')
+            ->allowEmpty('detail4');
+
+        $validator
+            ->scalar('detail5')
+            ->allowEmpty('detail5');
 
         $validator
             ->boolean('deleted')

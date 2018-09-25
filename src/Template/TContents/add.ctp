@@ -20,7 +20,14 @@
             echo $this->Form->control('domain');
             echo $this->Form->control('param');
             echo $this->Form->control('product_name');
-            echo $this->Form->control('detail');
+            echo $this->Form->control('number1');
+            echo $this->Form->control('number2');
+            echo $this->Form->control('number3');
+            echo $this->Form->control('detail1');
+            echo $this->Form->control('detail2');
+            echo $this->Form->control('detail3');
+            echo $this->Form->control('detail4');
+            echo $this->Form->control('detail5');
             echo $this->Form->control('deleted');
         ?>
     </fieldset>

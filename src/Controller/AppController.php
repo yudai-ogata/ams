@@ -17,6 +17,7 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
+use Cake\Core\Configure;
 
 /**
  * Application Controller
@@ -48,31 +49,35 @@ class AppController extends Controller
         parent::initialize();
         $this->TUsers = TableRegistry::get('tUsers');
         $this->TDomains = TableRegistry::get('tDomains');
+        //$content_column = Configure::read('content_column');
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
         //ログイン済みの場合、セッション情報の取得
         $session = $this->request->session();
         if ($session->check('Auth')) {
+            //ユーザー情報の取得
+            $id = $session->read('Auth.User.id');
+            $tUser = $this->TUsers->get($id);
             //ユーザーのnameの取得
-            $user_info['name'] = $session->read('Auth.User.name');
+            $user_info['name'] = $tUser['name'];
             //ユーザーのdomainの取得
-            $domain = $this->TDomains->get($session->read('Auth.User.t_domain_id'));
+            $domain = $this->TDomains->get($tUser['t_domain_id']);
             $user_info['domain'] = $domain['name'];
             //ユーザーのadminの取得
-            $user_info['admin'] = $session->read('Auth.User.admin');
+            $user_info['admin'] = $tUser['admin'];
             //ユーザーのdeleted fragの取得
-            $user_info['deleted'] = $session->read('Auth.User.deleted');
+            $user_info['deleted'] = $tUser['deleted'];
             //削除済みユーザーの場合強制ログアウト
             if($user_info['deleted'] == 1) {
                 $this->request->session()->destroy();
                 return $this->redirect($this->Auth->logout());
                 exit;
             }
-            $this->set(compact('user_info'));
+            $this->set(compact('user_info', 'content_column'));
         } else {
             $user_info = false;
-            $this->set(compact('user_info'));
+            $this->set(compact('user_info', 'content_column'));
         }
 
         //ログイン認証処理

@@ -23,7 +23,14 @@
             echo $this->Form->control('domain',['label'=>'ドメイン名']);
             echo $this->Form->control('param',['label'=>'アフィリパラメータ']);
             echo $this->Form->control('product_name',['label'=>'商品名']);
-            echo $this->Form->control('detail',['label'=>'詳細']);
+            echo $this->Form->control('number1',['label'=>'数量1']);
+            echo $this->Form->control('number2',['label'=>'数量2']);
+            echo $this->Form->control('number3',['label'=>'数量3']);
+            echo $this->Form->control('detail1',['label'=>'詳細1']);
+            echo $this->Form->control('detail2',['label'=>'詳細2']);
+            echo $this->Form->control('detail3',['label'=>'詳細3']);
+            echo $this->Form->control('detail4',['label'=>'詳細4']);
+            echo $this->Form->control('detail5',['label'=>'詳細5']);
         ?>
     </fieldset>
     <?= $this->Form->button(__('更新')) ?>
