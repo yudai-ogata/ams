@@ -230,6 +230,7 @@ class TContentsController extends AppController
         $tDomains = $this->TDomains->find()
               ->where(["TDomains.deleted =" => '0'])
               ->select(["name"])
+              ->order(['name' => 'ASC'])
               ->enableHydration(false)
               ->toArray();
         $this->set(compact('tContents',"tDomains", "find", 'number','page'));

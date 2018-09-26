@@ -108,7 +108,7 @@
     </table>
     <div class="row">
         <?php if( !empty($tContent->detail1) ) { ?>
-            <h4><?= __('詳細') ?></h4>
+            <h4><?= __('詳細1') ?></h4>
             <?= $this->Text->autoParagraph(h($tContent->detail1)); ?>
         <?php }
         if( !empty($tContent->detail2) ) { ?>

@@ -21,7 +21,8 @@
         <div class="findDomain">
             <h5 class="domain_ttl">ドメイン検索</h5>
             <?php
-              foreach($tDomains as $name ) {?>
+              foreach($tDomains as $name ) {
+                if( $name['name'] == 'admin' ) { continue; }; ?>
                 <?= $this->Html->link(__($name['name']), ['action' => 'find', $name['name']],[ 'class' => "domain_name"]) ?>
               <?php }
             ?>
@@ -50,9 +51,15 @@
             echo $this->Html->link(__('100件'), ['action' => 'find', $find,100],[ 'class' => "number"]);
         } ?>
     </div>
+    <?php if($user_info['admin'] == true) { ?>
+        <?= $this->Form->create($tContents,['action' => 'deleteBulk']) ?>
+    <?php } ?>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
+                <?php if ( $user_info['admin'] == true ){ ?>
+                    <th class="delete_th" scope="col">削除</th>
+                <?php } ?>
                 <th scope="col"><?= $this->Paginator->sort('登録日') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('ドメイン名') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('アフィリパラメータ') ?></th>
@@ -62,8 +69,17 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($tContents as $tContent): ?>
+            <?php $count = 0;
+            foreach ($tContents as $tContent): ?>
             <tr>
+                <?php
+                    if ( $user_info['admin'] == true ) { ?>
+                        <td>
+                        <?= $this->Form->control('id',['name' => 't_contents['.$count.'][id]','type' => 'hidden', 'value' => $tContent->id]) ?>
+                        <?= $this->Form->control('deleted',['name' => 't_contents['.$count.'][deleted]','type' => 'checkbox', 'label' => false]) ?>
+                        </td>
+                    <?php } ?>
+                </td>
                 <td><?= h($tContent->created->i18nFormat('YYYY/MM/dd HH:mm:ss')) ?></td>
                 <td><?= h($tContent->domain) ?></td>
                 <td><?= h($tContent->param) ?></td>
@@ -80,6 +96,10 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+    <?php if($user_info['admin'] == true) { ?>
+        <?= $this->Form->button(__('一括削除'), ['confirm' => __('一括削除してよろしいですか？'), 'class' => 'delete']) ?>
+        <?= $this->Form->end() ?>
+    <?php } ?>
     <?php
         if(isset($page)) {?>
             <a class="export_btn" href="/ams/t-contents/exportFind/<?= $find ?>?page=<?= $page ?>">CSV出力</a>
